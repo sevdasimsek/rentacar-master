@@ -35,9 +35,10 @@ public class TransmissionManager implements TransmissionService {
 
     @Override
     public UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest) {
-        Transmission updatedTransmission = modelMapperService.forRequest().map(updateTransmissionRequest, Transmission.class);
-        updatedTransmission.setUpdatedDate(LocalDateTime.now());
-        Transmission savedTransmission = transmissionRepository.save(updatedTransmission);
+        Transmission transmission = findById(updateTransmissionRequest.getId());
+        transmission.setName(updateTransmissionRequest.getName());
+        transmission.setUpdatedDate(LocalDateTime.now());
+        Transmission savedTransmission = transmissionRepository.save(transmission);
         return modelMapperService.forResponse().map(savedTransmission, UpdatedTransmissionResponse.class);
 
     }
@@ -61,7 +62,8 @@ public class TransmissionManager implements TransmissionService {
     @Override
     public void delete(int id) {
         Transmission transmission = findById(id);
-        transmissionRepository.deleteById(id);
+        transmission.setDeletedDate(LocalDateTime.now());
+        transmissionRepository.save(transmission);
     }
 
     private Transmission findById(int id) {

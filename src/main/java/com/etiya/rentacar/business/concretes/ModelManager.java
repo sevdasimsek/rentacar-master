@@ -10,10 +10,8 @@ import com.etiya.rentacar.business.dtos.responses.model.CreatedModelResponse;
 import com.etiya.rentacar.business.dtos.responses.model.GetModelListResponse;
 import com.etiya.rentacar.business.dtos.responses.model.GetModelResponse;
 import com.etiya.rentacar.business.dtos.responses.model.UpdatedModelResponse;
-import com.etiya.rentacar.dataAccess.abstracts.BrandRepository;
-import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
+import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;
-import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;
 import com.etiya.rentacar.entities.Brand;
 import com.etiya.rentacar.entities.Fuel;
 import com.etiya.rentacar.entities.Model;
@@ -21,7 +19,9 @@ import com.etiya.rentacar.entities.Transmission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -31,89 +31,49 @@ public class ModelManager implements ModelService {
     private FuelService fuelService;
     private TransmissionService transmissionService;
     private BrandService brandService;
+    private ModelMapperService modelMapperService;
 
 
     @Override
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
-        Model model = new Model();
-
-        Fuel fuel = fuelService.getByFuelId(createModelRequest.getFuelId());
-        Transmission transmission = transmissionService.getByTransmissionId(createModelRequest.getTransmissionId());
-        Brand brand = brandService.getByBrandId(createModelRequest.getBrandId());
-
-        model.setName(createModelRequest.getName());
-        model.setFuel(fuel);
-        model.setTransmission(transmission);
-        model.setBrand(brand);
-
-        modelRepository.save(model);
-
-        CreatedModelResponse response = new CreatedModelResponse();
-        response.setId(model.getId());
-        response.setName(model.getName());
-        response.setBrandId(model.getBrand().getId());
-        response.setFuelId(model.getFuel().getId());
-        response.setTransmissionId(model.getTransmission().getId());
-        response.setCreatedDate(model.getCreatedDate());
-
-        return response;
+        Model model = modelMapperService.forRequest().map(createModelRequest, Model.class);
+        model.setCreatedDate(LocalDateTime.now());
+        Model savedModel = modelRepository.save(model);
+        return modelMapperService.forResponse().map(savedModel, CreatedModelResponse.class);
     }
 
     @Override
     public UpdatedModelResponse update(UpdateModelRequest updateModelRequest) {
-        Model model = modelRepository.findById(updateModelRequest.getId()).orElseThrow(() -> new IllegalArgumentException("Model not found"));
-        Fuel fuel = fuelService.getByFuelId(updateModelRequest.getFuelId());
-        Transmission transmission = transmissionService.getByTransmissionId(updateModelRequest.getTransmissionId());
-        Brand brand = brandService.getByBrandId(updateModelRequest.getBrandId());
-
+        Model model = findById(updateModelRequest.getId());
         model.setName(updateModelRequest.getName());
-        model.setFuel(fuel);
-        model.setTransmission(transmission);
-        model.setBrand(brand);
-        modelRepository.save(model);
-
-
-        UpdatedModelResponse response = new UpdatedModelResponse();
-        response.setId(model.getId());
-        response.setName(model.getName());
-        response.setBrandId(model.getBrand().getId());
-        response.setFuelId(model.getFuel().getId());
-        response.setTransmissionId(model.getTransmission().getId());
-        response.setUpdatedDate(model.getUpdatedDate());
-        return response;
-    }
-
-    @Override
-    public GetModelResponse getById(int id) {
-
-        Model model = modelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Model not found"));
-        GetModelResponse response = new GetModelResponse();
-        response.setId(model.getId());
-        response.setName(model.getName());
-        response.setBrandId(model.getBrand().getId());
-        response.setFuelId(model.getFuel().getId());
-        response.setTransmissionId(model.getTransmission().getId());
-        return response;
+        model.setUpdatedDate(LocalDateTime.now());
+        Model savedModel = modelRepository.save(model);
+        return modelMapperService.forResponse().map(savedModel, UpdatedModelResponse.class);
     }
 
     @Override
     public List<GetModelListResponse> getAll() {
 
         List<Model> models = modelRepository.findAll();
-        List<GetModelListResponse> response = models.stream().map(model -> new GetModelListResponse(model.getId(), model.getName(), model.getBrand().getId(), model.getFuel().getId(), model.getTransmission().getId())).toList();
-        return response;
+        return models.stream().filter(model -> model.getDeletedDate() == null).map(model ->
+                modelMapperService.forResponse().map(model, GetModelListResponse.class)).collect(Collectors.toList());
     }
 
     @Override
-    public Model getByModelId(int id) {
-        Model model = modelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Model not found"));
-        return model;
+    public GetModelResponse getById(int id) {
+        Model model = findById(id);
+        return modelMapperService.forResponse().map(model, GetModelResponse.class);
     }
+
 
     @Override
     public void delete(int id) {
+        Model model = findById(id);
+        model.setDeletedDate(LocalDateTime.now());
+        modelRepository.save(model);
+    }
 
-        modelRepository.deleteById(id);
-
+    private Model findById(int id) {
+        return modelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
 }

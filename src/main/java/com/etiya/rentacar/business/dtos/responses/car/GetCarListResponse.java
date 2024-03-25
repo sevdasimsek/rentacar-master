@@ -14,4 +14,5 @@ public class GetCarListResponse {
     private int state;
     private double dailyPrice;
     private int modelId;
+    private double kilometer;
 }

@@ -14,5 +14,6 @@ public class CreateCarRequest {
     private int state;
     private double dailyPrice;
     private int modelId;
+    private double kilometer;
 
 }

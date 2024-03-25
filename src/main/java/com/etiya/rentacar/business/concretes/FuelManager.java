@@ -7,9 +7,11 @@ import com.etiya.rentacar.business.dtos.responses.fuel.CreatedFuelResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.GetFuelListResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.GetFuelResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.UpdatedFuelResponse;
+import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissionResponse;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
 import com.etiya.rentacar.entities.Fuel;
+import com.etiya.rentacar.entities.Transmission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,10 +36,11 @@ public class FuelManager implements FuelService {
 
     @Override
     public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest) {
-        Fuel updateFuel = modelMapperService.forRequest().map(updateFuelRequest, Fuel.class);
-        updateFuel.setUpdatedDate(LocalDateTime.now());
-        Fuel fuel = fuelRepository.save(updateFuel);
-        return modelMapperService.forResponse().map(updateFuel, UpdatedFuelResponse.class);
+        Fuel fuel = findById(updateFuelRequest.getId());
+        fuel.setName(updateFuelRequest.getName());
+        fuel.setUpdatedDate(LocalDateTime.now());
+        Fuel savedFuel = fuelRepository.save(fuel);
+        return modelMapperService.forResponse().map(savedFuel, UpdatedFuelResponse.class);
     }
 
     @Override
@@ -57,6 +60,7 @@ public class FuelManager implements FuelService {
     public void delete(int id) {
         Fuel fuel = findById(id);
         fuel.setDeletedDate(LocalDateTime.now());
+        fuelRepository.save(fuel);
     }
 
     private Fuel findById(int id) {
