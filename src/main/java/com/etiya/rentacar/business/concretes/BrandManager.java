@@ -13,7 +13,9 @@ import com.etiya.rentacar.entities.Brand;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
@@ -27,58 +29,44 @@ public class BrandManager implements BrandService {
     public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
         //todo: business rules
 
-        Brand brand = new Brand();
-        brand.setName(createBrandRequest.getName());
-
-        brandRepository.save(brand);
-
-        CreatedBrandResponse response = new CreatedBrandResponse();
-        response.setId(brand.getId());
-        response.setName(brand.getName());
-        response.setCreatedDate(brand.getCreatedDate());
-
-        return response;
+        Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
+        brand.setCreatedDate(LocalDateTime.now());
+        Brand savedBrand = brandRepository.save(brand);
+        return modelMapperService.forResponse().map(savedBrand, CreatedBrandResponse.class);
 
     }
 
     @Override
-    public UpdatedBrandResponse update(UpdateBrandRequest brand) {
-        Brand brandToUpdate = brandRepository.findById(brand.getId()).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
-        brandToUpdate.setName(brand.getName());
-
-
-        brandRepository.save(brandToUpdate);
-
-        UpdatedBrandResponse response = new UpdatedBrandResponse();
-        response.setId(brandToUpdate.getId());
-        response.setName(brandToUpdate.getName());
-        response.setUpdatedDate(brandToUpdate.getUpdatedDate());
-
-        return response;
-
+    public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest) {
+        Brand updatedBrand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
+        updatedBrand.setUpdatedDate(LocalDateTime.now());
+        Brand savedBrand = brandRepository.save(updatedBrand);
+        return modelMapperService.forResponse().map(savedBrand, UpdatedBrandResponse.class);
     }
 
     @Override
     public List<GetBrandListResponse> getAll() {
         List<Brand> brands = brandRepository.findAll();
-        return brands.stream().map(brand -> modelMapperService.forResponse().map())
+        return brands.stream().filter(brand -> brand.getDeletedDate() == null)
+                .map(brand -> modelMapperService.forResponse()
+                        .map(brand, GetBrandListResponse.class)).collect(Collectors.toList());
     }
 
     @Override
     public GetBrandResponse getById(int id) {
-        Brand brand = brandRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+        Brand brand = findById(id);
         return modelMapperService.forResponse().map(brand, GetBrandResponse.class);
     }
 
-    @Override
-    public Brand getByBrandId(int id) {
-
-        Brand brand = brandRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
-        return brand;
-    }
 
     @Override
     public void delete(int id) {
-        brandRepository.deleteById(id);
+        Brand brand = findById(id);
+        brand.setDeletedDate(LocalDateTime.now());
+
+    }
+
+    private Brand findById(int id) {
+        return brandRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
 }

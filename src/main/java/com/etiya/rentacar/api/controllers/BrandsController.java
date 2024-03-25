@@ -7,6 +7,7 @@ import com.etiya.rentacar.business.dtos.responses.brand.CreatedBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.GetBrandListResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.GetBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.UpdatedBrandResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +33,12 @@ public class BrandsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
+    public CreatedBrandResponse add(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
         return brandService.add(createBrandRequest);
     }
 
     @PutMapping
-    public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest) {
+    public UpdatedBrandResponse update(@Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
         return brandService.update(updateBrandRequest);
     }
 
