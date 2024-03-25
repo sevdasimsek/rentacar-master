@@ -7,75 +7,60 @@ import com.etiya.rentacar.business.dtos.responses.fuel.CreatedFuelResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.GetFuelListResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.GetFuelResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.UpdatedFuelResponse;
+import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
 import com.etiya.rentacar.entities.Fuel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Service
 public class FuelManager implements FuelService {
     private FuelRepository fuelRepository;
+    private ModelMapperService modelMapperService;
+
     @Override
     public CreatedFuelResponse add(CreateFuelRequest createFuelRequest) {
-        Fuel fuel = new Fuel();
-        fuel.setName(createFuelRequest.getName());
-        fuelRepository.save(fuel);
-
-        CreatedFuelResponse response = new CreatedFuelResponse();
-        response.setId(fuel.getId());
-        response.setName(fuel.getName());
-        response.setCreatedDate(fuel.getCreatedDate());
-
-        return response;
-
+        Fuel fuel = modelMapperService.forResponse().map(createFuelRequest, Fuel.class);
+        fuel.setCreatedDate(LocalDateTime.now());
+        Fuel savedFuel = fuelRepository.save(fuel);
+        return modelMapperService.forResponse().map(savedFuel, CreatedFuelResponse.class);
 
     }
 
     @Override
     public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest) {
-        Fuel fuel = fuelRepository.findById(updateFuelRequest.getId()).orElseThrow(() -> new IllegalArgumentException("Fuel not found"));
-        fuel.setName(updateFuelRequest.getName());
-        fuelRepository.save(fuel);
-
-        UpdatedFuelResponse response = new UpdatedFuelResponse();
-        response.setId(fuel.getId());
-        response.setName(fuel.getName());
-        response.setUpdatedDate(fuel.getUpdatedDate());
-
-        return response;
-    }
-
-    @Override
-    public GetFuelResponse getById(int id) {
-        Fuel fuel = fuelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Fuel not found"));
-        GetFuelResponse response = new GetFuelResponse();
-        response.setId(fuel.getId());
-        response.setName(fuel.getName());
-        return response;
+        Fuel updateFuel = modelMapperService.forRequest().map(updateFuelRequest, Fuel.class);
+        updateFuel.setUpdatedDate(LocalDateTime.now());
+        Fuel fuel = fuelRepository.save(updateFuel);
+        return modelMapperService.forResponse().map(updateFuel, UpdatedFuelResponse.class);
     }
 
     @Override
     public List<GetFuelListResponse> getAll() {
         List<Fuel> fuels = fuelRepository.findAll();
-        List<GetFuelListResponse> response = fuels.stream().map(fuel -> new GetFuelListResponse(fuel.getId(), fuel.getName())).toList();
-        return response;
+        return fuels.stream().filter(fuel -> fuel.getDeletedDate() == null).map(fuel ->
+                modelMapperService.forResponse().map(fuel, GetFuelListResponse.class)).collect(Collectors.toList());
     }
 
     @Override
-    public Fuel getByFuelId(int id) {
-
-        Fuel fuel = fuelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Fuel not found"));
-        return fuel;
+    public GetFuelResponse getById(int id) {
+        Fuel fuel = findById(id);
+        return modelMapperService.forResponse().map(fuel, GetFuelResponse.class);
     }
 
     @Override
     public void delete(int id) {
-
-        fuelRepository.deleteById(id);
-
+        Fuel fuel = findById(id);
+        fuel.setDeletedDate(LocalDateTime.now());
     }
 
+    private Fuel findById(int id) {
+        return fuelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+    }
 
 }

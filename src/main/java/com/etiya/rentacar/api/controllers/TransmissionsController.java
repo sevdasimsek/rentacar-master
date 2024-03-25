@@ -7,6 +7,7 @@ import com.etiya.rentacar.business.dtos.responses.transmission.CreatedTransmissi
 import com.etiya.rentacar.business.dtos.responses.transmission.GetTranmissionListResponse;
 import com.etiya.rentacar.business.dtos.responses.transmission.GetTranmissionResponse;
 import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissionResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,13 +34,13 @@ public class TransmissionsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedTransmissionResponse add(@RequestBody CreateTranmissionRequest createTransmissionRequest){
+    public CreatedTransmissionResponse add(@Valid @RequestBody CreateTranmissionRequest createTransmissionRequest){
         return transmissionService.add(createTransmissionRequest);
     }
 
 
     @PutMapping
-    public UpdatedTransmissionResponse update(@RequestBody UpdateTransmissionRequest updateTransmissionRequest){
+    public UpdatedTransmissionResponse update(@Valid @RequestBody UpdateTransmissionRequest updateTransmissionRequest){
         return transmissionService.update(updateTransmissionRequest);
     }
 

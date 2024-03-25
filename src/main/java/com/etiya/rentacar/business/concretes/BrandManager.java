@@ -17,17 +17,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @AllArgsConstructor
 @Service
 public class BrandManager implements BrandService {
     private final BrandRepository brandRepository;
     private ModelMapperService modelMapperService;
 
-
     @Override
     public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
-        //todo: business rules
 
         Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
         brand.setCreatedDate(LocalDateTime.now());
@@ -47,9 +44,8 @@ public class BrandManager implements BrandService {
     @Override
     public List<GetBrandListResponse> getAll() {
         List<Brand> brands = brandRepository.findAll();
-        return brands.stream().filter(brand -> brand.getDeletedDate() == null)
-                .map(brand -> modelMapperService.forResponse()
-                        .map(brand, GetBrandListResponse.class)).collect(Collectors.toList());
+        return brands.stream().filter(brand -> brand.getDeletedDate() == null).map(brand ->
+                modelMapperService.forResponse().map(brand, GetBrandListResponse.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -63,7 +59,6 @@ public class BrandManager implements BrandService {
     public void delete(int id) {
         Brand brand = findById(id);
         brand.setDeletedDate(LocalDateTime.now());
-
     }
 
     private Brand findById(int id) {

@@ -18,7 +18,5 @@ public interface FuelService {
     GetFuelResponse getById(int id);
 
     List<GetFuelListResponse> getAll();
-
-    Fuel getByFuelId(int id);
     void delete(int id);
 }
