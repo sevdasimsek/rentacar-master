@@ -4,15 +4,16 @@ import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.abstracts.ModelService;
 import com.etiya.rentacar.business.dtos.requests.car.CreateCarRequest;
 import com.etiya.rentacar.business.dtos.requests.car.UpdateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.brand.GetBrandListResponse;
 import com.etiya.rentacar.business.dtos.responses.car.CreatedCarResponse;
 import com.etiya.rentacar.business.dtos.responses.car.GetCarListResponse;
 import com.etiya.rentacar.business.dtos.responses.car.GetCarResponse;
 import com.etiya.rentacar.business.dtos.responses.car.UpdatedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissionResponse;
+import com.etiya.rentacar.business.rules.CarBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.CarRepository;
-import com.etiya.rentacar.entities.Brand;
 import com.etiya.rentacar.entities.Car;
+import com.etiya.rentacar.entities.Transmission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class CarManager implements CarService {
     private final CarRepository carRepository;
     private final ModelService modelService;
     private ModelMapperService modelMapperService;
+    private CarBusinessRules carBusinessRules;
 
     @Override
     public CreatedCarResponse add(CreateCarRequest createCarRequest) {
@@ -40,9 +42,11 @@ public class CarManager implements CarService {
 
     @Override
     public UpdatedCarResponse update(UpdateCarRequest updateCarRequest) {
-        Car updatedCar = modelMapperService.forRequest().map(updateCarRequest, Car.class);
-        updatedCar.setUpdatedDate(LocalDateTime.now());
-        Car savedCar = carRepository.save(updatedCar);
+        carBusinessRules.carIdIsExist(updateCarRequest.getId());
+        Car car = findById(updateCarRequest.getId());
+        Car mappedCar = modelMapperService.forRequest().map(updateCarRequest, Car.class);
+        mappedCar.setCreatedDate(car.getCreatedDate());
+        Car savedCar = carRepository.save(mappedCar);
         return modelMapperService.forResponse().map(savedCar, UpdatedCarResponse.class);
     }
 
@@ -70,6 +74,7 @@ public class CarManager implements CarService {
     }
 
     private Car findById(int id) {
+        carBusinessRules.carIdIsExist(id);
         return carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
 }

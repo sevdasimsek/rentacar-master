@@ -7,6 +7,7 @@ import com.etiya.rentacar.business.dtos.responses.transmission.CreatedTransmissi
 import com.etiya.rentacar.business.dtos.responses.transmission.GetTranmissionListResponse;
 import com.etiya.rentacar.business.dtos.responses.transmission.GetTranmissionResponse;
 import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissionResponse;
+import com.etiya.rentacar.business.rules.TransmissionBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;
 import com.etiya.rentacar.entities.Brand;
@@ -23,9 +24,11 @@ import java.util.stream.Collectors;
 public class TransmissionManager implements TransmissionService {
     private TransmissionRepository transmissionRepository;
     private ModelMapperService modelMapperService;
+    private TransmissionBusinessRules transmissionBusinessRules;
 
     @Override
     public CreatedTransmissionResponse add(CreateTranmissionRequest createTransmissionRequest) {
+        transmissionBusinessRules.transmissionNameCannotBeDuplicated(createTransmissionRequest.getName());
         Transmission transmission = modelMapperService.forRequest().map(createTransmissionRequest, Transmission.class);
         transmission.setCreatedDate(LocalDateTime.now());
         Transmission saveTransmission = transmissionRepository.save(transmission);
@@ -35,6 +38,8 @@ public class TransmissionManager implements TransmissionService {
 
     @Override
     public UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest) {
+        transmissionBusinessRules.transmissionNameCannotBeDuplicated(updateTransmissionRequest.getName());
+        transmissionBusinessRules.transmissionIdIsExist(updateTransmissionRequest.getId());
         Transmission transmission = findById(updateTransmissionRequest.getId());
         Transmission mappedTransmission = modelMapperService.forRequest().map(updateTransmissionRequest, Transmission.class);
         mappedTransmission.setCreatedDate(transmission.getCreatedDate());
@@ -53,8 +58,7 @@ public class TransmissionManager implements TransmissionService {
 
     @Override
     public GetTranmissionResponse getById(int id) {
-
-        Transmission transmission = transmissionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Transmission not found"));
+        Transmission transmission = findById(id);
         return new GetTranmissionResponse(transmission.getId(), transmission.getName());
     }
 
@@ -67,6 +71,7 @@ public class TransmissionManager implements TransmissionService {
     }
 
     private Transmission findById(int id) {
-        return transmissionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+        transmissionBusinessRules.transmissionIdIsExist(id);
+        return transmissionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Transmission not found"));
     }
 }

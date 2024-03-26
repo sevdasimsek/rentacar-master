@@ -10,6 +10,8 @@ import com.etiya.rentacar.business.dtos.responses.model.CreatedModelResponse;
 import com.etiya.rentacar.business.dtos.responses.model.GetModelListResponse;
 import com.etiya.rentacar.business.dtos.responses.model.GetModelResponse;
 import com.etiya.rentacar.business.dtos.responses.model.UpdatedModelResponse;
+import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissionResponse;
+import com.etiya.rentacar.business.rules.ModelBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;
 import com.etiya.rentacar.entities.Brand;
@@ -32,10 +34,11 @@ public class ModelManager implements ModelService {
     private TransmissionService transmissionService;
     private BrandService brandService;
     private ModelMapperService modelMapperService;
-
+    private ModelBusinessRules modelBusinessRules;
 
     @Override
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
+        modelBusinessRules.modelNameCannotBeDuplicated(createModelRequest.getName());
         Model model = modelMapperService.forRequest().map(createModelRequest, Model.class);
         model.setCreatedDate(LocalDateTime.now());
         Model savedModel = modelRepository.save(model);
@@ -44,10 +47,11 @@ public class ModelManager implements ModelService {
 
     @Override
     public UpdatedModelResponse update(UpdateModelRequest updateModelRequest) {
+        modelBusinessRules.modelNameCannotBeDuplicated(updateModelRequest.getName());
         Model model = findById(updateModelRequest.getId());
-        model.setName(updateModelRequest.getName());
-        model.setUpdatedDate(LocalDateTime.now());
-        Model savedModel = modelRepository.save(model);
+        Model mappedModel = modelMapperService.forRequest().map(updateModelRequest, Model.class);
+        mappedModel.setCreatedDate(model.getCreatedDate());
+        Model savedModel = modelRepository.save(mappedModel);
         return modelMapperService.forResponse().map(savedModel, UpdatedModelResponse.class);
     }
 
@@ -74,6 +78,7 @@ public class ModelManager implements ModelService {
     }
 
     private Model findById(int id) {
+        modelBusinessRules.brandIdIsExist(id);
         return modelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
 }

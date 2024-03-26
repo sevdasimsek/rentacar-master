@@ -8,6 +8,7 @@ import com.etiya.rentacar.business.dtos.responses.fuel.GetFuelListResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.GetFuelResponse;
 import com.etiya.rentacar.business.dtos.responses.fuel.UpdatedFuelResponse;
 import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissionResponse;
+import com.etiya.rentacar.business.rules.FuelBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
 import com.etiya.rentacar.entities.Fuel;
@@ -24,9 +25,11 @@ import java.util.stream.Collectors;
 public class FuelManager implements FuelService {
     private FuelRepository fuelRepository;
     private ModelMapperService modelMapperService;
+    private FuelBusinessRules fuelBusinessRules;
 
     @Override
     public CreatedFuelResponse add(CreateFuelRequest createFuelRequest) {
+        fuelBusinessRules.fuelNameCannotBeDuplicated(createFuelRequest.getName());
         Fuel fuel = modelMapperService.forResponse().map(createFuelRequest, Fuel.class);
         fuel.setCreatedDate(LocalDateTime.now());
         Fuel savedFuel = fuelRepository.save(fuel);
@@ -36,10 +39,12 @@ public class FuelManager implements FuelService {
 
     @Override
     public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest) {
+        fuelBusinessRules.fuelNameCannotBeDuplicated(updateFuelRequest.getName());
+        fuelBusinessRules.fuelIdIsExist(updateFuelRequest.getId());
         Fuel fuel = findById(updateFuelRequest.getId());
-        fuel.setName(updateFuelRequest.getName());
-        fuel.setUpdatedDate(LocalDateTime.now());
-        Fuel savedFuel = fuelRepository.save(fuel);
+        Fuel mappedFuel = modelMapperService.forRequest().map(updateFuelRequest, Fuel.class);
+        mappedFuel.setCreatedDate(fuel.getCreatedDate());
+        Fuel savedFuel = fuelRepository.save(mappedFuel);
         return modelMapperService.forResponse().map(savedFuel, UpdatedFuelResponse.class);
     }
 
@@ -52,19 +57,22 @@ public class FuelManager implements FuelService {
 
     @Override
     public GetFuelResponse getById(int id) {
+        fuelBusinessRules.fuelIdIsExist(id);
         Fuel fuel = findById(id);
         return modelMapperService.forResponse().map(fuel, GetFuelResponse.class);
     }
 
     @Override
     public void delete(int id) {
+        fuelBusinessRules.fuelIdIsExist(id);
         Fuel fuel = findById(id);
         fuel.setDeletedDate(LocalDateTime.now());
         fuelRepository.save(fuel);
     }
 
     private Fuel findById(int id) {
-        return fuelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+        fuelBusinessRules.fuelIdIsExist(id);
+        return fuelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Fuel not found"));
     }
 
 }
