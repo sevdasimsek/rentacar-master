@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.CarRepository;
 import com.etiya.rentacar.entities.Brand;
 import com.etiya.rentacar.entities.Car;
@@ -17,7 +18,7 @@ public class CarBusinessRules {
     public void carIdIsExist(int id) {
         Optional<Car> car = carRepository.findById(id);
         if (car.isEmpty()) {
-            throw new RuntimeException("Car Id Is Not Exists...");
+            throw new BusinessException("Car Id Is Not Exists...");
         }
     }
 }

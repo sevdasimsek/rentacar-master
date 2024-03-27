@@ -7,6 +7,7 @@ import com.etiya.rentacar.business.dtos.responses.brand.CreatedBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.GetBrandListResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.GetBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.UpdatedBrandResponse;
+import com.etiya.rentacar.core.exceptions.types.InternalServerErrorException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class BrandsController {
 
     @GetMapping("/{id}")
     public GetBrandResponse getById(@PathVariable int id) {
+        //throw new InternalServerErrorException("Internal server error exception custom");
         return brandService.getById(id);
     }
 

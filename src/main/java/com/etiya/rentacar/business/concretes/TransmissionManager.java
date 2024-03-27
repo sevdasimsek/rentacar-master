@@ -45,7 +45,6 @@ public class TransmissionManager implements TransmissionService {
         mappedTransmission.setCreatedDate(transmission.getCreatedDate());
         Transmission savedTransmission = transmissionRepository.save(mappedTransmission);
         return modelMapperService.forResponse().map(savedTransmission, UpdatedTransmissionResponse.class);
-
     }
 
     @Override
