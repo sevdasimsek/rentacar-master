@@ -23,4 +23,7 @@ public class Car extends BaseEntity {
     private Model model;
     @Column(name="kilometer")
     private double kilometer;
+    @ManyToOne
+    @JoinColumn(name = "rentalBranchId")
+    private RentalBranch rentalBranch;
 }
