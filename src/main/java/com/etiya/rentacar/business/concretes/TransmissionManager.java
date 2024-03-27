@@ -30,7 +30,6 @@ public class TransmissionManager implements TransmissionService {
     public CreatedTransmissionResponse add(CreateTranmissionRequest createTransmissionRequest) {
         transmissionBusinessRules.transmissionNameCannotBeDuplicated(createTransmissionRequest.getName());
         Transmission transmission = modelMapperService.forRequest().map(createTransmissionRequest, Transmission.class);
-        transmission.setCreatedDate(LocalDateTime.now());
         Transmission saveTransmission = transmissionRepository.save(transmission);
         return modelMapperService.forResponse().map(saveTransmission, CreatedTransmissionResponse.class);
 

@@ -33,7 +33,6 @@ public class CarManager implements CarService {
     @Override
     public CreatedCarResponse add(CreateCarRequest createCarRequest) {
         Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
-        car.setCreatedDate(LocalDateTime.now());
         Car savedCar = carRepository.save(car);
         return modelMapperService.forResponse().map(savedCar, CreatedCarResponse.class);
 

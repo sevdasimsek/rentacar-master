@@ -24,17 +24,17 @@ public class BaseEntity {
     private LocalDateTime deletedDate;
 
     @PrePersist
-    private void beforeAdd(){
+    private void onCreate(){
         createdDate = LocalDateTime.now();
     }
 
     @PreUpdate
-    private void beforeUpdate(){
+    private void onUpdate(){
         updatedDate = LocalDateTime.now();
     }
 
     @PreRemove
-    private void beforeDelete(){
+    private void onDelete(){
         deletedDate = LocalDateTime.now();
     }
 

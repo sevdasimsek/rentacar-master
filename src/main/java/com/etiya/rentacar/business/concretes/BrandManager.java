@@ -29,7 +29,6 @@ public class BrandManager implements BrandService {
     public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
         brandBusinessRules.brandNameCannotBeDuplicated(createBrandRequest.getName());
         Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
-        brand.setCreatedDate(LocalDateTime.now());
         Brand savedBrand = brandRepository.save(brand);
         return modelMapperService.forResponse().map(savedBrand, CreatedBrandResponse.class);
 
@@ -66,7 +65,7 @@ public class BrandManager implements BrandService {
         brandRepository.save(brand);
     }
 
-    private Brand findById(int id) {
+    public Brand findById(int id) {
         brandBusinessRules.brandIdIsExist(id);
         return brandRepository.findById(id).get();
     }
