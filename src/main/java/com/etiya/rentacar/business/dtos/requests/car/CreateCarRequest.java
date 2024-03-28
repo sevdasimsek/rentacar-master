@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCarRequest {
-
+    private int rentalBranchId;
+    private int modelId;
     @NotEmpty(message = "Model Year name cannot be empty")
     @Size(min = 4, max = 5)
     private int modelYear;
@@ -26,7 +27,6 @@ public class CreateCarRequest {
     @NotEmpty(message = "Kilometer Year name cannot be empty")
     @Size(min = 2, max = 30)
     private double kilometer;
-    private int modelId;
 
 
 }

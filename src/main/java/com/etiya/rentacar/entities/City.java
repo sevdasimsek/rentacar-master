@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cities")
+@Table(name = "Cities")
 public class City extends BaseEntity {
     @Column(name = "name")
     private String name;

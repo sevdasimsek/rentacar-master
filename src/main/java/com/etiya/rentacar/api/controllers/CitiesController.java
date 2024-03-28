@@ -17,19 +17,9 @@ import java.util.List;
 public class CitiesController {
     private CityService cityService;
 
-    @GetMapping("/{id}")
-    public GetCityResponse findById(@PathVariable int id) {
-        return cityService.getById(id);
-    }
-
-    @GetMapping
-    public List<GetCityListResponse> findAll() {
-        return cityService.getAll();
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedCityResponse save(@Valid @RequestBody CreateCityRequest createCityRequest) {
+    public CreatedCityResponse add(@Valid @RequestBody CreateCityRequest createCityRequest) {
         return cityService.add(createCityRequest);
     }
 
@@ -38,9 +28,21 @@ public class CitiesController {
         return cityService.update(updateCityRequest);
     }
 
+    @GetMapping
+    public List<GetCityListResponse> getAll() {
+        return cityService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public GetCityResponse getById(@PathVariable int id) {
+        return cityService.getById(id);
+    }
+
     @DeleteMapping("/{id}")
     public DeletedCityResponse delete(@PathVariable int id) {
         return cityService.delete(id);
     }
+
+
 }
 

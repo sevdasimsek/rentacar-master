@@ -20,16 +20,6 @@ public class CarsController {
 
     private CarService carService;
 
-    @GetMapping
-    public List<GetCarListResponse> getAll() {
-        return carService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public GetCarResponse getById(@PathVariable int id) {
-        return carService.getById(id);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreatedCarResponse add(CreateCarRequest createCarRequest) {
@@ -39,6 +29,16 @@ public class CarsController {
     @PutMapping
     public UpdatedCarResponse update(UpdateCarRequest updateCarRequest) {
         return carService.update(updateCarRequest);
+    }
+
+    @GetMapping
+    public List<GetCarListResponse> getAll() {
+        return carService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public GetCarResponse getById(@PathVariable int id) {
+        return carService.getById(id);
     }
 
     @DeleteMapping("/{id}")

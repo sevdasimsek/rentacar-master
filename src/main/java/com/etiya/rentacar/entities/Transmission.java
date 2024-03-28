@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="transmissions")
+@Table(name="Transmissions")
 public class Transmission extends BaseEntity {
     @Column(name = "name")
     private String name;

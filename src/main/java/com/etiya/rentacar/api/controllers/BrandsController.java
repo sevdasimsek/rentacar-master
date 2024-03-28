@@ -7,7 +7,6 @@ import com.etiya.rentacar.business.dtos.responses.brand.CreatedBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.GetBrandListResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.GetBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.brand.UpdatedBrandResponse;
-import com.etiya.rentacar.core.exceptions.types.InternalServerErrorException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,17 +21,6 @@ public class BrandsController {
 
     private BrandService brandService;
 
-    @GetMapping
-    public List<GetBrandListResponse> getAll() {
-        return brandService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public GetBrandResponse getById(@PathVariable int id) {
-        //throw new InternalServerErrorException("Internal server error exception custom");
-        return brandService.getById(id);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreatedBrandResponse add(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
@@ -42,6 +30,17 @@ public class BrandsController {
     @PutMapping
     public UpdatedBrandResponse update(@Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
         return brandService.update(updateBrandRequest);
+    }
+
+    @GetMapping
+    public List<GetBrandListResponse> getAll() {
+        return brandService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public GetBrandResponse getById(@PathVariable int id) {
+        //throw new InternalServerErrorException("Internal server error exception custom");
+        return brandService.getById(id);
     }
 
     @DeleteMapping("/{id}")

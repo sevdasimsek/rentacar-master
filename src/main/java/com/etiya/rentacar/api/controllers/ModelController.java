@@ -20,30 +20,31 @@ public class ModelController {
 
     private ModelService modelService;
 
-    @GetMapping
-    public List<GetModelListResponse> getAll(){
-        return modelService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public GetModelResponse getById(@PathVariable int id){
-        return modelService.getById(id);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedModelResponse add(@RequestBody CreateModelRequest createModelRequest){
+    public CreatedModelResponse add(@RequestBody CreateModelRequest createModelRequest) {
 
         return modelService.add(createModelRequest);
     }
 
     @PutMapping
-    public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest){
+    public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest) {
         return modelService.update(updateModelRequest);
     }
 
+    @GetMapping
+    public List<GetModelListResponse> getAll() {
+        return modelService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public GetModelResponse getById(@PathVariable int id) {
+        return modelService.getById(id);
+    }
+
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable int id) {
         modelService.delete(id);
     }
 }

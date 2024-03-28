@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "brands")
+@Table(name = "Brands")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +25,5 @@ public class Brand extends BaseEntity {
 
     @OneToMany(mappedBy = "brand")
     private List<Model> models;
-
-
 
 }

@@ -18,35 +18,34 @@ import java.util.List;
 @RequestMapping("/api/v1/fuels")
 public class FuelsController {
 
-   private FuelService fuelService;
+    private FuelService fuelService;
 
-   @GetMapping
-   public List<GetFuelListResponse> getAll(){
-       return fuelService.getAll();
-   }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreatedFuelResponse add(@RequestBody CreateFuelRequest createFuelRequest) {
+        return fuelService.add(createFuelRequest);
+    }
 
-   @GetMapping("/{id}")
-   public GetFuelResponse getById(@PathVariable int id){
-       return fuelService.getById(id);
-   }
+    @PutMapping
+    public UpdatedFuelResponse update(@RequestBody UpdateFuelRequest updateFuelRequest) {
+        return fuelService.update(updateFuelRequest);
+    }
 
-   @PostMapping
-   @ResponseStatus(HttpStatus.CREATED)
-   public CreatedFuelResponse add(@RequestBody CreateFuelRequest createFuelRequest){
-       return fuelService.add(createFuelRequest);
-   }
+    @GetMapping
+    public List<GetFuelListResponse> getAll() {
+        return fuelService.getAll();
+    }
 
-   @PutMapping
-   public UpdatedFuelResponse update(@RequestBody UpdateFuelRequest updateFuelRequest){
-       return fuelService.update(updateFuelRequest);
-   }
-
-   @DeleteMapping("/{id}")
-   public void delete(@PathVariable int id){
-       fuelService.delete(id);
-   }
+    @GetMapping("/{id}")
+    public GetFuelResponse getById(@PathVariable int id) {
+        return fuelService.getById(id);
+    }
 
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        fuelService.delete(id);
+    }
 
 
 }
