@@ -16,7 +16,9 @@ public interface CustomerService {
 
     GetCustomerResponse getById(int id);
 
+    public Customer findById(int id);
+
     DeletedCustomerResponse delete(int id);
 
-    //public Customer findById(int id); ??
+
 }

@@ -3,10 +3,7 @@ package com.etiya.rentacar.business.concretes;
 import com.etiya.rentacar.business.abstracts.RentalBranchService;
 import com.etiya.rentacar.business.dtos.requests.rentalBranch.CreateRentalBranchRequest;
 import com.etiya.rentacar.business.dtos.requests.rentalBranch.UpdateRentalBranchRequest;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.CreatedRentalBranchResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.GetRentalBranchListResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.GetRentalBranchResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.UpdatedRentalBranchResponse;
+import com.etiya.rentacar.business.dtos.responses.rentalBranch.*;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.RentalBranchRepository;
 import com.etiya.rentacar.entities.RentalBranch;
@@ -21,7 +18,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RentalBranchManager implements RentalBranchService {
     private RentalBranchRepository rentalBranchRepository;
-    private RentalBranchService rentalBranchService;
     private ModelMapperService modelMapperService;
 
     @Override

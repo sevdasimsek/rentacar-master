@@ -10,7 +10,6 @@ import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissi
 import com.etiya.rentacar.business.rules.TransmissionBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;
-import com.etiya.rentacar.entities.Brand;
 import com.etiya.rentacar.entities.Transmission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,7 +56,7 @@ public class TransmissionManager implements TransmissionService {
     @Override
     public GetTranmissionResponse getById(int id) {
         Transmission transmission = findById(id);
-        return new GetTranmissionResponse(transmission.getId(), transmission.getName());
+        return modelMapperService.forResponse().map(transmission, GetTranmissionResponse.class);
     }
 
 

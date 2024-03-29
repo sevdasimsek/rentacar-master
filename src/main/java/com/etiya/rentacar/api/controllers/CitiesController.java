@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("api/v1/cities")
 @AllArgsConstructor
 public class CitiesController {
+
     private CityService cityService;
 
     @PostMapping

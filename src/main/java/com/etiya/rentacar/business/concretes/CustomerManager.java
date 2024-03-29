@@ -2,17 +2,22 @@ package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.CustomerService;
 import com.etiya.rentacar.business.dtos.requests.customer.CreateCustomerRequest;
-import com.etiya.rentacar.business.dtos.responses.customer.CreatedCustomerResponse;
-import com.etiya.rentacar.business.dtos.responses.customer.UpdatedCustomerResponse;
+import com.etiya.rentacar.business.dtos.requests.customer.UpdateCustomerRequest;
+import com.etiya.rentacar.business.dtos.responses.customer.*;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.CustomerRepository;
 import com.etiya.rentacar.entities.Customer;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@AllArgsConstructor
 public class CustomerManager implements CustomerService {
+
     private ModelMapperService modelMapperService;
     private CustomerRepository customerRepository;
 
@@ -33,16 +38,18 @@ public class CustomerManager implements CustomerService {
     }
 
     @Override
-    public List<GetListCustomerResponse> getAll() {
+    public List<GetCustomerListResponse> getAll() {
         List<Customer> customers = customerRepository.findAll();
         return customers.stream().filter(customer -> customer.getDeletedDate() == null)
                 .map(customer -> modelMapperService.forResponse()
-                        .map(customer, GetListCustomerResponse.class)).collect(Collectors.toList());
+                        .map(customer, GetCustomerListResponse.class)).collect(Collectors.toList());
     }
+
     public GetCustomerResponse getById(int id) {
         Customer customer = findById(id);
         return modelMapperService.forResponse().map(customer, GetCustomerResponse.class);
     }
+
     @Override
     public DeletedCustomerResponse delete(int id) {
         Customer customer = findById(id);

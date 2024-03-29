@@ -88,7 +88,7 @@ public class CarManager implements CarService {
         car.setKilometer(kilometer);
     }
 
-    private Car findById(int id) {
+    public Car findById(int id) {
         carBusinessRules.carIdIsExist(id);
         return carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }

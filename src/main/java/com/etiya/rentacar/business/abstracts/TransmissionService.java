@@ -19,8 +19,5 @@ public interface TransmissionService {
     List<GetTranmissionListResponse> getAll();
 
     GetTranmissionResponse getById(int id);
-
-    Transmission getByTransmissionId(int id);
-
     void delete(int id);
 }

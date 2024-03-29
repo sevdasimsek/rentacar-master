@@ -4,18 +4,23 @@ import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.abstracts.CustomerService;
 import com.etiya.rentacar.business.abstracts.RentalService;
 import com.etiya.rentacar.business.dtos.requests.rental.CreateRentalRequest;
-import com.etiya.rentacar.business.dtos.responses.rental.CreatedRentalResponse;
+import com.etiya.rentacar.business.dtos.requests.rental.UpdateRentalRequest;
+import com.etiya.rentacar.business.dtos.responses.rental.*;
 import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.RentalRepository;
 import com.etiya.rentacar.entities.Car;
 import com.etiya.rentacar.entities.Customer;
 import com.etiya.rentacar.entities.Rental;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@AllArgsConstructor
 public class RentalManager implements RentalService {
     private RentalRepository rentalRepository;
     private ModelMapperService modelMapperService;
@@ -66,11 +71,9 @@ public class RentalManager implements RentalService {
     }
 
     @Override
-    public List<GetListRentalResponse> getAll() {
+    public List<GetRentalListResponse> getAll() {
         List<Rental> rentals = rentalRepository.findAll();
-        return rentals.stream().filter(rental -> rental.getDeletedDate() == null)
-                .map(rental -> modelMapperService.forResponse()
-                        .map(rental, GetListRentalResponse.class)).collect(Collectors.toList());
+        return rentals.stream().filter(rental -> rental.getDeletedDate() == null).map(rental -> modelMapperService.forResponse().map(rental, GetRentalListResponse.class)).collect(Collectors.toList());
     }
 
     @Override

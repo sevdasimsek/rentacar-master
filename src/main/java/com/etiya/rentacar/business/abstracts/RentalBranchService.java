@@ -5,10 +5,7 @@ import com.etiya.rentacar.business.dtos.requests.rentalBranch.UpdateRentalBranch
 import com.etiya.rentacar.business.dtos.responses.city.DeletedCityResponse;
 import com.etiya.rentacar.business.dtos.responses.city.GetCityListResponse;
 import com.etiya.rentacar.business.dtos.responses.city.GetCityResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.CreatedRentalBranchResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.GetRentalBranchListResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.GetRentalBranchResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalBranch.UpdatedRentalBranchResponse;
+import com.etiya.rentacar.business.dtos.responses.rentalBranch.*;
 
 import java.util.List;
 
@@ -21,7 +18,6 @@ public interface RentalBranchService {
     List<GetRentalBranchListResponse> getAll();
 
     GetRentalBranchResponse getById(int id);
-
-    void delete(int id);
+    DeletedRentalBranchResponse delete(int id);
 
 }

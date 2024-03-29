@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping("api/v1/rentalbranches")
 @AllArgsConstructor
 public class RentalBranchController {
+
     private RentalBranchService rentalBranchService;
 
     @PostMapping
