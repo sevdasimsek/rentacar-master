@@ -1,33 +1,32 @@
 package com.etiya.rentacar.entities;
+
 import com.etiya.rentacar.core.entities.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.*;
 
 import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name="Models")
+@Table(name = "models")
 public class Model extends BaseEntity {
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="brandId")
+    @JoinColumn(name = "brandId")
     private Brand brand;
 
     @ManyToOne
-    @JoinColumn(name="fuelId")
+    @JoinColumn(name = "fuelId")
     private Fuel fuel;
 
     @ManyToOne
-    @JoinColumn(name="transmissionId")
+    @JoinColumn(name = "transmissionId")
     private Transmission transmission;
 
     @OneToMany(mappedBy = "model")

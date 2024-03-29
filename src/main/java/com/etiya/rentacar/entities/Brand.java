@@ -11,16 +11,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
-@Table(name = "Brands")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
+@Entity
+@Table(name = "brands")
 public class Brand extends BaseEntity {
 
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
     @OneToMany(mappedBy = "brand")

@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
-@Table(name = "Fuels")
+@Table(name = "fuels")
 public class Fuel extends BaseEntity {
     @Column(name = "name")
     private String name;

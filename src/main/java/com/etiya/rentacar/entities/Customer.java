@@ -11,27 +11,29 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
-@Table(name = "Customers")
+@Table(name = "customers")
 public class Customer extends BaseEntity {
-    @OneToMany(mappedBy = "customer")
-    private List<Rental> rentals;
 
     @Column(name = "userName")
     private String userName;
-
+    @Column(name = "nationalId")
+    private String nationalId;
     @Column(name = "firstName")
     private String firstName;
-
     @Column(name = "lastName")
     private String lastName;
-
-    @Column(name = "email")
+    @Column(name = "email", unique = true) //Db kolonuna unique özelliği atadık,
     private String email;
-
+    @Column(name = "password")
+    private String password;
     @Column(name = "companyName")
     private String companyName;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Rental> rentals;
 }

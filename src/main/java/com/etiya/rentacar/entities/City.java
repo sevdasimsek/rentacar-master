@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
-@Table(name = "Cities")
+@Table(name = "cities")
 public class City extends BaseEntity {
     @Column(name = "name")
     private String name;

@@ -8,21 +8,21 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
 @Table(name = "rentalBraches")
 public class RentalBranch extends BaseEntity {
+
+    @Column(name = "name")
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "cityId")
     private City city;
 
-    @OneToMany(mappedBy = "rentalBranch")
-    private List<Car> cars;
 
     @OneToMany(mappedBy = "rentalBranch")
-    private List<Rental> rentals;
+    private List<Car> cars;
 }
