@@ -6,12 +6,18 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CreatedRentalBranchResponse {
+
+    private int id;
+
     private String name;
+
     private LocalDateTime createdDate;
+
     private int cityId;
+
     private String cityName;
 }

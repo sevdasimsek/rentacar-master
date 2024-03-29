@@ -4,19 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class GetModelResponse {
 
     private int id;
 
     private String name;
 
-    private int brandId;
+    private String brandName;
 
-    private int fuelId;
+    private String transmissionName;
 
-    private int transmissionId;
+    private String fuelName;
 
 }

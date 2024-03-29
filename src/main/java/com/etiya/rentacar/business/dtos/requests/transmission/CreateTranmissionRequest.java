@@ -6,11 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CreateTranmissionRequest {
-    @NotEmpty(message ="Transm name cannot be empty")
+    @NotEmpty(message ="Transmission name cannot be empty")
     @Size(min = 2,max = 30)
     private String name;
 

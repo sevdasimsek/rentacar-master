@@ -10,12 +10,17 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class UpdatedRentalBranchResponse {
+    private int id;
+
     private String name;
-    private LocalDateTime createdDate;
+
     private int cityId;
+
     private String cityName;
+
+    private LocalDateTime updatedDate;
 }

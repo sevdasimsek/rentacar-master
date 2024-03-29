@@ -6,16 +6,28 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CreatedCarResponse {
 
     private int id;
+
     private int modelYear;
+
     private String plate;
+
     private int state;
+
     private double dailyPrice;
+
     private int modelId;
+
+    private String modelName;
+
+    private double kilometer;
+
+    private String rentalBranchName;
+
     private LocalDateTime createdDate;
 }

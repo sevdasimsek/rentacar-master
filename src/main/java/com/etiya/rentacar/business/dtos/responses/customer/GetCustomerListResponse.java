@@ -1,13 +1,17 @@
-package com.etiya.rentacar.business.dtos.requests.customer;
+package com.etiya.rentacar.business.dtos.responses.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class CreateCustomerRequest {
+public class GetCustomerListResponse {
+
+    private int id;
 
     private String userName;
 
@@ -22,4 +26,6 @@ public class CreateCustomerRequest {
     private String password;
 
     private String companyName;
+
+    private LocalDateTime createdDate;
 }

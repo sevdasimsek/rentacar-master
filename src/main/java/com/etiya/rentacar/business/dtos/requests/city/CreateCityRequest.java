@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateCityRequest {
+
+    @NotEmpty(message = "name is not empty")
     @NotEmpty(message = "City name cannot be empty")
     @Size(min = 2, max = 30)
     private String name;

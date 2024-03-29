@@ -10,11 +10,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdatedCarResponse {
+
     private int id;
+
     private int modelYear;
+
     private String plate;
+
     private int state;
+
     private double dailyPrice;
+
     private int modelId;
+
+    private double kilometer;
+
     private LocalDateTime updatedDate;
+
 }

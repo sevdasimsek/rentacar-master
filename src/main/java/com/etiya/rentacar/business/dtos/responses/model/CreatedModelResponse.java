@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CreatedModelResponse {
 
     private int id;

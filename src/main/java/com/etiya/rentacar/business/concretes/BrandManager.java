@@ -29,6 +29,7 @@ public class BrandManager implements BrandService {
     public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
         brandBusinessRules.brandNameCannotBeDuplicated(createBrandRequest.getName());
         Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
+        brand.setCreatedDate(LocalDateTime.now());
         Brand savedBrand = brandRepository.save(brand);
         return modelMapperService.forResponse().map(savedBrand, CreatedBrandResponse.class);
 
@@ -48,7 +49,9 @@ public class BrandManager implements BrandService {
     @Override
     public List<GetBrandListResponse> getAll() {
         List<Brand> brands = brandRepository.findAll();
-        return brands.stream().filter(brand -> brand.getDeletedDate() == null).map(brand -> modelMapperService.forResponse().map(brand, GetBrandListResponse.class)).collect(Collectors.toList());
+        return brands.stream().filter(brand -> brand.getDeletedDate() == null)
+                .map(brand -> modelMapperService.forResponse()
+                        .map(brand, GetBrandListResponse.class)).collect(Collectors.toList());
     }
 
     @Override

@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreatedRentalResponse {
+public class GetRentalListResponse {
+
+    private int id;
 
     private int carId;
 
@@ -36,7 +37,10 @@ public class CreatedRentalResponse {
 
     private LocalDate rentEndDate;
 
+    private LocalDate returnDate;
+
     private int rentStartKilometer;
 
-    private LocalDateTime createdDate;
+    private int rentEndKilometer;
+
 }

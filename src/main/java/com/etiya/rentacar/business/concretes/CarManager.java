@@ -8,12 +8,10 @@ import com.etiya.rentacar.business.dtos.responses.car.CreatedCarResponse;
 import com.etiya.rentacar.business.dtos.responses.car.GetCarListResponse;
 import com.etiya.rentacar.business.dtos.responses.car.GetCarResponse;
 import com.etiya.rentacar.business.dtos.responses.car.UpdatedCarResponse;
-import com.etiya.rentacar.business.dtos.responses.transmission.UpdatedTransmissionResponse;
 import com.etiya.rentacar.business.rules.CarBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.CarRepository;
 import com.etiya.rentacar.entities.Car;
-import com.etiya.rentacar.entities.Transmission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +68,24 @@ public class CarManager implements CarService {
         car.setDeletedDate(LocalDateTime.now());
         carRepository.save(car);
 
+    }
+    @Override
+    public void updateCarState(int carId, int state) {
+        Car car = findById(carId);
+        car.setState(state);
+    }
+
+
+    @Override
+    public void updateCarRentalBranchId(int carId, int rentalBranchId) {
+        Car car = findById(carId);
+        car.setRentalBranch(car.getRentalBranch());
+    }
+
+    @Override
+    public void updateCarKilometer(int carId, int kilometer) {
+        Car car = findById(carId);
+        car.setKilometer(kilometer);
     }
 
     private Car findById(int id) {

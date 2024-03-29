@@ -8,5 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UpdateRentalBranchRequest {
-    private  int cityId;
+
+    private int id;
+
+    private String name;
+
+    private int cityId;
+
 }

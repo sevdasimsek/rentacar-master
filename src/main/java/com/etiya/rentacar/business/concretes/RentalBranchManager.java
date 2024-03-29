@@ -13,7 +13,9 @@ import com.etiya.rentacar.entities.RentalBranch;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,22 +33,38 @@ public class RentalBranchManager implements RentalBranchService {
 
     @Override
     public UpdatedRentalBranchResponse update(UpdateRentalBranchRequest updateRentalBranchRequest) {
-        return null;
+        RentalBranch rentalBranch = findById(updateRentalBranchRequest.getId());
+        RentalBranch mappedRentalBranch = modelMapperService.forRequest().map(updateRentalBranchRequest, RentalBranch.class);
+        mappedRentalBranch.setCreatedDate(rentalBranch.getCreatedDate());
+        RentalBranch updatedRentalBranch = rentalBranchRepository.save(mappedRentalBranch);
+        return modelMapperService.forResponse().map(updatedRentalBranch, UpdatedRentalBranchResponse.class);
     }
 
     @Override
     public List<GetRentalBranchListResponse> getAll() {
-        return null;
+        List<RentalBranch> rentalBranches = rentalBranchRepository.findAll();
+        return rentalBranches.stream().filter(rentalBranch -> rentalBranch.getDeletedDate() == null)
+                .map(rentalBranch -> modelMapperService.forResponse()
+                        .map(rentalBranch, GetRentalBranchListResponse.class)).collect(Collectors.toList());
+
     }
 
     @Override
     public GetRentalBranchResponse getById(int id) {
-        return null;
+        RentalBranch rentalBranch = findById(id);
+        return modelMapperService.forResponse().map(rentalBranch, GetRentalBranchResponse.class);
+    }
+    @Override
+    public DeletedRentalBranchResponse delete(int id) {
+        RentalBranch rentalBranch = findById(id);
+        rentalBranch.setDeletedDate(LocalDateTime.now());
+        rentalBranchRepository.save(rentalBranch);
+        return modelMapperService.forResponse().map(rentalBranch, DeletedRentalBranchResponse.class);
     }
 
-    @Override
-    public void delete(int id) {
-
+    public RentalBranch findById(int id) {
+        //cityBusinessRules.cityIdIsExist(id);
+        return rentalBranchRepository.findById(id).get();
     }
 
 }

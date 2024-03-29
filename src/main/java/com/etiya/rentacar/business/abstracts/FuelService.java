@@ -15,8 +15,11 @@ public interface FuelService {
     CreatedFuelResponse add(CreateFuelRequest createFuelRequest);
 
     UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest);
-    GetFuelResponse getById(int id);
 
     List<GetFuelListResponse> getAll();
+
+    GetFuelResponse getById(int id);
+
+    //Fuel getByFuelId(int id);
     void delete(int id);
 }

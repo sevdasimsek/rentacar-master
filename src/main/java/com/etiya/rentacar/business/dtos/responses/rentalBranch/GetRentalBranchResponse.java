@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class GetRentalBranchResponse {
     private int id;
     private String name;
+    private LocalDateTime createdDate;
+    private int cityId;
     private String cityName;
 }

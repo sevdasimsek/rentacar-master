@@ -1,32 +1,39 @@
 package com.etiya.rentacar.business.dtos.requests.car;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CreateCarRequest {
-    private int rentalBranchId;
-    private int modelId;
-    @NotEmpty(message = "Model Year name cannot be empty")
-    @Size(min = 4, max = 5)
+
+    @NotEmpty(message = "model year is not empty")
+    @NotBlank(message = "model year is not only spaces")
     private int modelYear;
-    @NotEmpty(message = "Plate Year name cannot be empty")
-    @Size(min = 2, max = 30)
+
+    @NotEmpty(message = "model year is not empty")
+    @NotBlank(message = "model year is not only spaces")
     private String plate;
-    @NotEmpty(message = "State Year name cannot be empty")
-    @Size(min = 1, max = 3)
+
+    @NotEmpty(message = "model year is not empty")
+    @NotBlank(message = "model year is not only spaces")
     private int state;
-    @NotEmpty(message = "Daily Price Year name cannot be empty")
-    @Size(min = 3, max = 30)
+
+    @NotEmpty(message = "model year is not empty")
+    @NotBlank(message = "model year is not only spaces")
     private double dailyPrice;
-    @NotEmpty(message = "Kilometer Year name cannot be empty")
-    @Size(min = 2, max = 30)
+
+    @NotEmpty(message = "model year is not empty")
+    @NotBlank(message = "model year is not only spaces")
+    private int modelId;
+
+    @NotEmpty(message = "model year is not empty")
+    @NotBlank(message = "model year is not only spaces")
     private double kilometer;
 
-
+    private int rentalBranchId;
 }

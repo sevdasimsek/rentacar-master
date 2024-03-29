@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface CarService {
     CreatedCarResponse add(CreateCarRequest createCarRequest);
+
     UpdatedCarResponse update(UpdateCarRequest updateCarRequest);
 
     GetCarResponse getById(int id);
@@ -19,5 +20,12 @@ public interface CarService {
 
     void delete(int id);
 
+    //public Car findById (int id); ??
+
+    public void updateCarState(int carId, int state);
+
+    public void updateCarRentalBranchId(int carId, int rentalBranchId);
+
+    public void updateCarKilometer(int carId, int kilometer);
 
 }

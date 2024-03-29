@@ -9,14 +9,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateRentalRequest {
+public class UpdateRentalRequest {
 
-    private int carId;
+    private int id;
 
-    private int customerId;
+    private LocalDate returnDate;
 
-    private LocalDate rentStartDate;
+    private int rentEndKilometer;
 
-    private LocalDate rentEndDate;
+    private int rentalBranchId;
 }
-
